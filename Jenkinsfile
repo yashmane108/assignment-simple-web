@@ -38,7 +38,7 @@ pipeline {
         
         stage('Deployment Edit') {
             steps {
-                sh "sed -i 's|REPLACE|${env.dockerHubUser}/simple-web:${BRANCH}-${BUILD_NUMBER}|g' deployment.yaml"
+                sh "sed -i 's|REPLACE|${IMAGE}|g' deployment.yaml"
             }
         }
         
