@@ -20,7 +20,7 @@ spec:
       containers:
       - name: my-cont
 
-        image: yashmane108/simple-web:REPLACE
+        image: REPLACE
 
         ports:
         - containerPort: 80
