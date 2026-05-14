@@ -25,27 +25,27 @@ pipeline {
         stage("push to docker hub") {
             steps {
                 withCredentials([usernamePassword(
-                credentialsId:"${CredID}",
-               passwordVariable: "dockerHubPass",
-               usernameVariable: "dockerHubUser"
-               )]){
-               sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+                credentialsId:"dockerCred",
+                passwordVariable: "dockerHubPass",
+                usernameVariable: "dockerHubUser"
+                )]){
+                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
                 //  sh "docker image tag ${ImageID} ${env.dockerHubUser}/${ImageID}"
-               sh "docker image tag ${ImageID}:${env.BUILD_NUMBER} ${env.dockerHubUser}/${ImageID}:${env.BUILD_NUMBER}"
-               sh "docker push ${env.dockerHubUser}/${ImageID}:${env.BUILD_NUMBER}"
-               }    
+                sh "docker image tag simple-web:${env.BUILD_NUMBER} ${env.dockerHubUser}/simple-web:${env.BUILD_NUMBER}"
+                sh "docker push ${env.dockerHubUser}/simple-web:${env.BUILD_NUMBER}"
+                }    
+             }
+         }
+        
+        stage('Deployment Edit') {
+            steps {
+                sh "sed -i 's|REPLACE|${env.BUILD_NUMBER}|g' deployment.yaml"
             }
         }
         
         stage('Create Namespace') {
             steps {
                 sh "kubectl create namespace ${env.NAMESPACE} || true"
-            }
-        }
-
-        stage('Deployment Edit') {
-            steps {
-                sh "sed -i 's|REPLACE|${env.BUILD_NUMBER}|g' deployment.yaml"
             }
         }
 
