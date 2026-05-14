@@ -5,7 +5,7 @@ pipeline {
         BRANCH = "${env.BRANCH_NAME}"
         NAMESPACE = "pr-${env.BRANCH_NAME}"
         IMAGE = "simple-web:${env.BUILD_NUMBER}"
-        Manifest_file_path = "eks/deployment.yaml"
+        // Manifest_file_path = "deployment.yaml"
     }
 
     stages {
@@ -28,11 +28,11 @@ pipeline {
             }
         }
 
-        // stage('Deployment Edit') {
-        //     steps {
-        //         sh "sed -i 's|REPLACE|${env.BUILD_NUMBER}|g' ${env.Manifest_file_path}"
-        //     }
-        // }
+        stage('Deployment Edit') {
+            steps {
+                sh "sed -i 's|REPLACE|${env.BUILD_NUMBER}|g' deployment.yaml"
+            }
+        }
 
         stage('Deploy') {
             steps {
