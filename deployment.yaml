@@ -18,9 +18,9 @@ spec:
 
     spec:
       containers:
-      - name: yashmane108/simple-pod:REPLACE
+      - name: my-cont
 
-        image: simple-web:1
+        image: yashmane108/simple-web:REPLACE
 
         ports:
         - containerPort: 80
