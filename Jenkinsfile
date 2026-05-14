@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         BRANCH = "${env.BRANCH_NAME}"
-        NAMESPACE = "pr-${env.BRANCH_NAME}"
-        IMAGE = "simple-web:${env.BUILD_NUMBER}"
+        NAMESPACE = "pr-${env.BRANCH}"
+        IMAGE = "yashmane108/simple-web:${BRANCH}-${BUILD_NUMBER}"
         // Manifest_file_path = "deployment.yaml"
     }
 
@@ -30,16 +30,15 @@ pipeline {
                 usernameVariable: "dockerHubUser"
                 )]){
                 sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                //  sh "docker image tag ${ImageID} ${env.dockerHubUser}/${ImageID}"
-                sh "docker image tag simple-web:${env.BUILD_NUMBER} ${env.dockerHubUser}/simple-web:${env.BUILD_NUMBER}"
-                sh "docker push ${env.dockerHubUser}/simple-web:${env.BUILD_NUMBER}"
+                //sh "docker image tag simple-web:${env.BUILD_NUMBER} ${env.dockerHubUser}/simple-web:${env.BUILD_NUMBER}"
+                sh "docker push ${env.dockerHubUser}/simple-web:${BRANCH}-${BUILD_NUMBER}"
                 }    
              }
          }
         
         stage('Deployment Edit') {
             steps {
-                sh "sed -i 's|REPLACE|${env.BUILD_NUMBER}|g' deployment.yaml"
+                sh "sed -i 's|REPLACE|${env.dockerHubUser}/simple-web:${BRANCH}-${BUILD_NUMBER}|g' deployment.yaml"
             }
         }
         
