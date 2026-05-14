@@ -18,7 +18,7 @@ spec:
 
     spec:
       containers:
-      - name: simple-pod
+      - name: yashmane108/simple-pod:REPLACE
 
         image: simple-web:1
 
