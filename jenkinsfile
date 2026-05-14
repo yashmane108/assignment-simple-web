@@ -4,7 +4,7 @@ pipeline {
     environment {
         BRANCH = "${env.BRANCH_NAME}"
         NAMESPACE = "pr-${env.BRANCH_NAME}"
-        IMAGE = "dynovivo/demo:${env.BUILD_NUMBER}"
+        IMAGE = "yashmane108/demo:${env.BUILD_NUMBER}"
     }
 
     stages {
