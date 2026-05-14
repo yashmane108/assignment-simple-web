@@ -4,7 +4,8 @@ pipeline {
     environment {
         BRANCH = "${env.BRANCH_NAME}"
         NAMESPACE = "pr-${env.BRANCH_NAME}"
-        IMAGE = "yashmane108/demo:${env.BUILD_NUMBER}"
+        IMAGE = "simple-web:${env.BUILD_NUMBER}"
+        Manifest_file_path = "eks/deployment.yaml"
     }
 
     stages {
@@ -17,8 +18,15 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${IMAGE} ."
-        }   }
+                sh "docker build -t ${IMAGE} ." 
+            }
+        }
+
+        stage('Docker: Image Push') {
+            steps {
+                dockerHubPushCred("dockerCred", "simple-app")
+            }
+        }
 
         stage('Create Namespace') {
             steps {
@@ -27,11 +35,17 @@ pipeline {
             }
         }
 
+        stage('Deployment Edit') {
+            steps {
+                sh "sed -i 's|REPLACE|${env.BUILD_NUMBER}|g' ${env.Manifest_file_path}"
+            }
+        }
+
         stage('Deploy') {
             steps {
                 sh """
-                kubectl apply -f deployment.yaml -n ${NAMESPACE}
-                kubectl apply -f service.yaml -n ${NAMESPACE}
+                kubectl apply -f ${env.Manifest_file_path} -n ${NAMESPACE}
+                kubectl apply -f ${env.Manifest_file_path} -n ${NAMESPACE}
                 """
             }
         }
