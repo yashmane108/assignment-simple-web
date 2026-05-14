@@ -56,5 +56,20 @@ pipeline {
                 """
             }
         }
+
+        stage('Cleanup Old PR Namespaces') {
+            when {
+                branch 'staging'
+            }
+
+            steps {
+                echo "Waiting 10 minutes before cleanup..."
+                sleep time: 10, unit: 'MINUTES'
+                sh """
+                kubectl delete namespace pr-feature-login --ignore-not-found=true
+                kubectl delete namespace pr-feature-search --ignore-not-found=true
+                """
+            }
+        }
     }
 }
