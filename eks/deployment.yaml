@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 
 metadata:
-  name: demo-app
+  name: my-dep
 
 spec:
   replicas: 1
@@ -18,7 +18,7 @@ spec:
 
     spec:
       containers:
-      - name: demo-app
+      - name: simple-pod
 
         image: yashmane108/simple-web:REPLACE
 
