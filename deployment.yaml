@@ -20,7 +20,7 @@ spec:
       containers:
       - name: simple-pod
 
-        image: yashmane108/simple-web:REPLACE
+        image: simple-web:1
 
         ports:
         - containerPort: 80
