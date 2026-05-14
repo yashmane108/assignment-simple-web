@@ -12,7 +12,7 @@ pipeline {
 
         stage('Clone Repo') {
             steps {
-                echo "Branch: ${BRANCH}"
+                echo "Branch: ${env.BRANCH}"
             }
         }
 
@@ -30,8 +30,7 @@ pipeline {
 
         stage('Create Namespace') {
             steps {
-                sh """
-                kubectl create namespace ${NAMESPACE} || true
+                sh "kubectl create namespace ${env.NAMESPACE} || true"
             }
         }
 
@@ -44,8 +43,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh """
-                kubectl apply -f ${env.Manifest_file_path} -n ${NAMESPACE}
-                kubectl apply -f ${env.Manifest_file_path} -n ${NAMESPACE}
+                kubectl apply -f ${env.Manifest_file_path} -n ${env.NAMESPACE}
+                kubectl apply -f ${env.Manifest_file_path} -n ${env.NAMESPACE}
                 """
             }
         }
