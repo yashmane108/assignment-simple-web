@@ -22,29 +22,23 @@ pipeline {
             }
         }
 
-        stage('Docker: Image Push') {
-            steps {
-                dockerHubPushCred("dockerCred", "simple-app")
-            }
-        }
-
         stage('Create Namespace') {
             steps {
                 sh "kubectl create namespace ${env.NAMESPACE} || true"
             }
         }
 
-        stage('Deployment Edit') {
-            steps {
-                sh "sed -i 's|REPLACE|${env.BUILD_NUMBER}|g' ${env.Manifest_file_path}"
-            }
-        }
+        // stage('Deployment Edit') {
+        //     steps {
+        //         sh "sed -i 's|REPLACE|${env.BUILD_NUMBER}|g' ${env.Manifest_file_path}"
+        //     }
+        // }
 
         stage('Deploy') {
             steps {
                 sh """
-                kubectl apply -f ${env.Manifest_file_path} -n ${env.NAMESPACE}
-                kubectl apply -f ${env.Manifest_file_path} -n ${env.NAMESPACE}
+                kubectl apply -f deployment.yaml -n ${env.NAMESPACE}
+                kubectl apply -f service.yaml -n ${env.NAMESPACE}
                 """
             }
         }
